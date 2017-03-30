@@ -12,6 +12,8 @@ private let mainCellReuseID = UICollectionViewCell.nameOfClass
 
 class BQMainViewController: UIViewController {
     
+    var itemSize = CGSize.zero
+    
     // MARK: - Properties
     fileprivate lazy var subControllers: [UIViewController] = {
         return [BQHomeViewController.nameOfClass, BQTrendingViewController.nameOfClass, BQSubscriptionsViewController.nameOfClass, BQAccountViewController.nameOfClass].map {
@@ -90,7 +92,6 @@ class BQMainViewController: UIViewController {
         
         // CollectionView
         view.addSubview(collcetionView)
-        collcetionView.backgroundColor = .blue
         collcetionView.snp.makeConstraints { (make) in
             make.left.bottom.centerX.equalToSuperview()
             make.top.equalTo(tabBar.snp.bottom)
@@ -113,11 +114,17 @@ class BQMainViewController: UIViewController {
     }
     
     func hiddenNavigationBar(with notification: Notification) {
-        DispatchQueue.main.async { 
+        DispatchQueue.main.async {
             if let hidden = notification.object as? Bool {
-                self.navigationController?.setNavigationBarHidden(hidden, animated: true)
+                if hidden {
+                    self.itemSize = CGSize(width: self.collcetionView.width, height: self.collcetionView.height + kStatusAndNavigationHeight)
+                } else {
+                    self.itemSize = CGSize(width: self.collcetionView.width, height: self.collcetionView.height - kStatusAndNavigationHeight)
+                }
+                self.collcetionView.reloadData()
+                self.itemSize = .zero
+                self.navigationController?.setNavigationBarHidden(hidden, animated: false)
             }
-            self.collcetionView.reloadData()
         }
     }
 }
@@ -145,13 +152,13 @@ extension BQMainViewController: UICollectionViewDelegate {
         let subContr = subControllers[indexPath.item]
         if !subContr.isViewLoaded {
             addChildViewController(subContr)
-            cell.contentView.addSubview(subContr.view)
+            cell.addSubview(subContr.view)
             subContr.view.snp.makeConstraints({ (make) in
                 make.edges.equalToSuperview()
             })
             subContr.didMove(toParentViewController: self)
         } else {
-            cell.contentView.addSubview(subContr.view)
+            cell.addSubview(subContr.view)
             subContr.view.snp.makeConstraints({ (make) in
                 make.edges.equalToSuperview()
             })
@@ -163,6 +170,10 @@ extension BQMainViewController: UICollectionViewDelegate {
 extension BQMainViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return collectionView.size
+        if itemSize == .zero {
+            return collectionView.size
+        } else {
+            return itemSize
+        }
     }
 }
