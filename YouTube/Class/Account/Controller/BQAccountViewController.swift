@@ -8,88 +8,67 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
+private let headerCellReuseID = BQAccountHeaderCell.nameOfClass
+private let menuCellReuseID = BQAccountMenuCell.nameOfClass
+private let playListCellReuseID = BQAccountPlayListCell.nameOfClass
 
-class BQAccountViewController: UICollectionViewController {
-
+class BQAccountViewController: BQBaseCollectionViewController {
+    
+    var account = BQAccountModel(backgroundImage: nil, name: "Loading...", profilePic: nil, playLists: [])
+    let menuImages = [Asset.History, Asset.My_Videos, Asset.Notifications, Asset.Watch_Later]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        view.backgroundColor = UIColor.random
-        // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
-        // Do any additional setup after loading the view.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    override func loadNewData() {
+        BQAccountModel.fetchAccountInfo(with: URLLink.account.link()) { (account: BQAccountModel?) in
+            if let account = account {
+                self.account = account
+                self.collectionView?.reloadData()
+            }
+        }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
+    override func loadMoreData() {
     }
-    */
+}
 
-    // MARK: UICollectionViewDataSource
-
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
-
+// MARK: - UICollectionViewDataSource
+extension BQAccountViewController {
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 0
+        return 1 + menuImages.count + (account.playlists?.count)!
     }
-
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        
+        var returnCell = UICollectionViewCell()
+        if case 0 = indexPath.item  {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: headerCellReuseID, for: indexPath) as! BQAccountHeaderCell
+            cell.account = account
+            returnCell = cell
+        } else if case 1...4 = indexPath.item {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: menuCellReuseID, for: indexPath) as! BQAccountMenuCell
+            cell.setWith(image: menuImages[indexPath.item - 1].image, title: menuImages[indexPath.item - 1].rawValue, hiddenLine: 4 != indexPath.item)
+            returnCell = cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: playListCellReuseID, for: indexPath) as! BQAccountPlayListCell
+            cell.listItem = account.playlists?[indexPath.item - 5]
+            returnCell = cell
+        }
+        return returnCell
+    }
+}
+
+extension BQAccountViewController {
     
-        // Configure the cell
-    
-        return cell
+    override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if case 0 = indexPath.item  {
+            return CGSize(width: collectionView.width, height: 120)
+        } else if case 1...4 = indexPath.item {
+            return CGSize(width: collectionView.width, height: 50)
+        } else {
+            return CGSize(width: collectionView.width, height: 70)
+        }
     }
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-
 }

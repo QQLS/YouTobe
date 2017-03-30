@@ -8,7 +8,7 @@
 
 import UIKit
 
-private let reuseIdentifier = UICollectionViewCell.nameOfClass
+private let mainCellReuseID = UICollectionViewCell.nameOfClass
 
 class BQMainViewController: UIViewController {
     
@@ -35,7 +35,7 @@ class BQMainViewController: UIViewController {
         collectionView.isPagingEnabled = true
         collectionView.isDirectionalLockEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: mainCellReuseID)
         return collectionView
     } ()
     
@@ -67,6 +67,7 @@ class BQMainViewController: UIViewController {
         super.viewDidLoad()
         
         p_setupView()
+        NotificationCenter.default.addObserver(self, selector: #selector(BQMainViewController.hiddenNavigationBar(with:)), name: NSNotification.Name(NavigationWillHiddenNotification), object: nil)
     }
     
     private func p_setupView() {
@@ -110,22 +111,33 @@ class BQMainViewController: UIViewController {
             settingView.show()
         }
     }
+    
+    func hiddenNavigationBar(with notification: Notification) {
+        DispatchQueue.main.async { 
+            if let hidden = notification.object as? Bool {
+                self.navigationController?.setNavigationBarHidden(hidden, animated: true)
+            }
+            self.collcetionView.reloadData()
+        }
+    }
 }
 
 // MARK: - UICollectionViewDataSource
 extension BQMainViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return subControllers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: mainCellReuseID, for: indexPath)
         return cell
     }
 }
 
 // MARK: - UICollectionViewDataSource
 extension BQMainViewController: UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard subControllers.count > indexPath.item else {
             return

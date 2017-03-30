@@ -47,7 +47,7 @@ class BQVideoItem: BQModelProtocol {
     }
     
     // MARK: - Method
-    class func fetchVideoItemList(from url: URL, complete: (([BQVideoItem]?) -> (Void))?) {
+    class func fetchVideoItemList(from url: URL, complete: (([BQVideoItem]?) -> Void)?) {
         Alamofire.request(url, method: .get).responseArray { (response: DataResponse<[BQVideoItem]>) in
             guard let complete = complete else {
                 return

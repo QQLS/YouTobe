@@ -19,15 +19,15 @@ class BQVideoListCell: UICollectionViewCell {
     @IBOutlet weak var durationLabel: UILabel!
     
     var videoModel: BQVideoItem? {
-        willSet {
-            guard let newValue = newValue else {
+        didSet {
+            guard let realValue = videoModel else {
                 return
             }
-            videoImage.kf.setImage(with: URL(string: newValue.thumbnail_image_name))
-            channelImage.kf.setImage(with: URL(string: (newValue.channel?.profile_image_name)!))
-            titleLabel.text = newValue.title
-            descriptionLabel.text = (newValue.channel?.name)! + String(describing: newValue.number_of_views)
-            durationLabel.text = " " + newValue.duration! + " "
+            videoImage.kf.setImage(with: URL(string: realValue.thumbnail_image_name))
+            channelImage.kf.setImage(with: URL(string: (realValue.channel?.profile_image_name)!))
+            titleLabel.text = realValue.title
+            descriptionLabel.text = (realValue.channel?.name)! + String(describing: realValue.number_of_views)
+            durationLabel.text = " " + realValue.duration! + " "
         }
     }
 }

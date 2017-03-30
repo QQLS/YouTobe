@@ -21,7 +21,9 @@ let kStatusAndNavigationHeight: CGFloat =  kStatusBarHeight + kNavigationBarHeig
 let kScreenBounds: CGRect = UIScreen.main.bounds
 let kScreenWidth: CGFloat = kScreenBounds.size.width
 let kScreenHeight: CGFloat = kScreenBounds.size.height
-let kSchemeColor: UIColor = UIColor.rgb(r: 228, g: 34, b: 24)
+let kSchemeColor: UIColor = .rgb(r: 228, g: 34, b: 24)
+let PlayChangeNotification = "PlayChangeNotification"
+let NavigationWillHiddenNotification = "NavigationWillHiddenNotification"
 
 enum URLLink: NSString {
     case home = "http://mexonis.com/home.json"
