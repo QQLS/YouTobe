@@ -51,7 +51,7 @@ class BQSettingView: UIView {
         }
         UIView.animate(withDuration: 0.25, animations: {
             self.bgView.alpha = 0.5
-            self.tableView.layoutIfNeeded()
+            self.tableView.superview?.layoutIfNeeded()
         }) { (_) in
             self.tableView.reloadData()
         }
@@ -63,7 +63,7 @@ class BQSettingView: UIView {
         }
         UIView.animate(withDuration: 0.25, animations: { 
             self.bgView.alpha = 0
-            self.tableView.layoutIfNeeded()
+            self.tableView.superview?.layoutIfNeeded()
         }) { (_) in
             self.removeFromSuperview()
             self.delegate?.switchSettingViewTo(hidden: true)
@@ -93,6 +93,8 @@ class BQSettingView: UIView {
             make.top.equalTo(self.snp.bottom).offset(0)
             make.height.equalTo(rowHeight * Float(items.count))
         }
+        // 下面的方法只有作用在父视图上才会起作用
+        layoutIfNeeded()
     }
 }
 

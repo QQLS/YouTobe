@@ -11,11 +11,18 @@ import SnapKit
 
 private let reuseIdentifier = BQTabBarItem.nameOfClass
 
+protocol BQTabBarDelegate: class {
+    func didSelectItem(at indexPath: IndexPath)
+}
+
 class BQTabBar: UIView {
     
     let sideLineHeight = 5.0
     let itemNormal = [Asset.Home, Asset.Trending, Asset.Subscriptions, Asset.Account]
     let itemSelected = [Asset.HomeDark, Asset.TrendingDark, Asset.SubscriptionsDark, Asset.AccountDark]
+    var oldSelectedIndexPath = IndexPath.init(item: 0, section: 0)
+    var newSelectIndexPath = IndexPath.init(item: 0, section: 0)
+    weak var delegate: BQTabBarDelegate?
     
     private lazy var collectionView: UICollectionView = { // 盛放 TabBarItem
         let layout = UICollectionViewFlowLayout()
@@ -45,18 +52,22 @@ class BQTabBar: UIView {
     private func p_setupView() {
         backgroundColor = kSchemeColor
         
-        self.addSubview(collectionView)
+        addSubview(collectionView)
         collectionView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
         
-        self.addSubview(sideLine)
+        addSubview(sideLine)
         sideLine.snp.makeConstraints { (make) in
             make.height.equalTo(sideLineHeight)
             make.width.equalToSuperview().multipliedBy(1 / Float(itemNormal.count))
             make.left.equalToSuperview().offset(0)
             make.bottom.equalToSuperview()
         }
+        
+        let firstIndexPath = IndexPath.init(item: 0, section: 0)
+        collectionView.selectItem(at: firstIndexPath, animated: false, scrollPosition: .centeredHorizontally)
+        animateSideLine(to: firstIndexPath)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -64,10 +75,30 @@ class BQTabBar: UIView {
     }
     
     
-    func switchSelectedStatus() {
-//        let preIndexPath = (collectionView.indexPathsForSelectedItems?.last)!
-//        let preCell = collectionView.cellForItem(at: preIndexPath) as! BQTabBarItem
-//        preCell.itemImage.image = (itemNormal[preIndexPath.item] as Asset).image
+    // MARK: - Action
+    func switchSelectItem(to indexPath: IndexPath) {
+        if indexPath == oldSelectedIndexPath {
+            return
+        }
+        oldSelectedIndexPath = newSelectIndexPath
+        newSelectIndexPath = indexPath
+        deselectItem(at: oldSelectedIndexPath)
+        selectItem(at: newSelectIndexPath)
+    }
+    
+    fileprivate func deselectItem(at indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        if let cell = collectionView.cellForItem(at: indexPath) as? BQTabBarItem {
+            cell.itemImage.image = itemNormal[indexPath.item].image
+        }
+    }
+    
+    fileprivate func selectItem(at indexPath: IndexPath) {
+        collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+        if let cell = collectionView.cellForItem(at: indexPath) as? BQTabBarItem {
+            cell.itemImage.image = itemSelected[indexPath.item].image
+            animateSideLine(to: indexPath)
+        }
     }
     
     fileprivate func animateSideLine(to indexPath: IndexPath) {
@@ -75,7 +106,7 @@ class BQTabBar: UIView {
             make.left.equalToSuperview().offset(Float(indexPath.item) / Float(itemNormal.count) * Float(kScreenWidth))
         }
         UIView.animate(withDuration: 0.1) {
-            self.sideLine.layoutIfNeeded()
+            self.sideLine.superview?.layoutIfNeeded()
         }
     }
 }
@@ -88,7 +119,7 @@ extension BQTabBar: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! BQTabBarItem
-        cell.itemImage.image = (itemNormal[indexPath.item] as Asset).image
+        cell.itemImage.image = ((cell.isSelected ? itemSelected : itemNormal)[indexPath.item] as Asset).image
         return cell
     }
 }
@@ -96,14 +127,15 @@ extension BQTabBar: UICollectionViewDataSource {
 extension BQTabBar: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! BQTabBarItem
-        cell.itemImage.image = (itemSelected[indexPath.item] as Asset).image
-        animateSideLine(to: indexPath)
+        oldSelectedIndexPath = indexPath
+        newSelectIndexPath = indexPath
+        
+        selectItem(at: indexPath)
+        delegate?.didSelectItem(at: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! BQTabBarItem
-        cell.itemImage.image = (itemNormal[indexPath.item] as Asset).image
+        deselectItem(at: indexPath)
     }
 }
 

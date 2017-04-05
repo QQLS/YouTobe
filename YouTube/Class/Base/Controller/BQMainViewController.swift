@@ -12,7 +12,8 @@ private let mainCellReuseID = UICollectionViewCell.nameOfClass
 
 class BQMainViewController: UIViewController {
     
-    var itemSize = CGSize.zero
+    fileprivate var itemSize = CGSize.zero
+    fileprivate var isCanScroll = false
     
     // MARK: - Properties
     fileprivate lazy var subControllers: [UIViewController] = {
@@ -25,12 +26,12 @@ class BQMainViewController: UIViewController {
     } ()
     
     // MARK: - Views
-    private lazy var collcetionView: UICollectionView = {
+    fileprivate lazy var collcetionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
         layout.scrollDirection = .horizontal
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: CGRect.init(x: 0, y: kStatusAndNavigationHeight, width: kScreenWidth, height: kScreenHeight - kStatusAndNavigationHeight), collectionViewLayout: layout)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.bounces = false
@@ -41,8 +42,9 @@ class BQMainViewController: UIViewController {
         return collectionView
     } ()
     
-    private lazy var tabBar: BQTabBar = {
+    fileprivate lazy var tabBar: BQTabBar = {
         let tabBar = BQTabBar(frame: .zero)
+        tabBar.delegate = self
         return tabBar
     } ()
     
@@ -83,18 +85,19 @@ class BQMainViewController: UIViewController {
             make.left.equalToSuperview().offset(10)
         }
         
+        // CollectionView
+        view.addSubview(collcetionView)
+        // 如果添加约束的话,会导致 collectionView 在导航栏消失和隐藏的时候会闪动的问题
+//        collcetionView.snp.makeConstraints { (make) in
+//            make.left.bottom.centerX.equalToSuperview()
+//            make.top.equalTo(tabBar.snp.bottom)
+//        }
+        
         // TabBar
         view.addSubview(tabBar)
         tabBar.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
             make.height.equalTo(kStatusAndNavigationHeight)
-        }
-        
-        // CollectionView
-        view.addSubview(collcetionView)
-        collcetionView.snp.makeConstraints { (make) in
-            make.left.bottom.centerX.equalToSuperview()
-            make.top.equalTo(tabBar.snp.bottom)
         }
     }
     
@@ -116,14 +119,7 @@ class BQMainViewController: UIViewController {
     func hiddenNavigationBar(with notification: Notification) {
         DispatchQueue.main.async {
             if let hidden = notification.object as? Bool {
-                if hidden {
-                    self.itemSize = CGSize(width: self.collcetionView.width, height: self.collcetionView.height + kStatusAndNavigationHeight)
-                } else {
-                    self.itemSize = CGSize(width: self.collcetionView.width, height: self.collcetionView.height - kStatusAndNavigationHeight)
-                }
-                self.collcetionView.reloadData()
-                self.itemSize = .zero
-                self.navigationController?.setNavigationBarHidden(hidden, animated: false)
+                self.navigationController?.setNavigationBarHidden(hidden, animated: true)
             }
         }
     }
@@ -170,10 +166,31 @@ extension BQMainViewController: UICollectionViewDelegate {
 extension BQMainViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if itemSize == .zero {
-            return collectionView.size
-        } else {
-            return itemSize
+        return collectionView.size
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+extension BQMainViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if isCanScroll {
+            let index = Double(scrollView.contentOffset.x / scrollView.width) + 0.5
+            let indexPath = IndexPath.init(item: Int(index), section: 0)
+            tabBar.switchSelectItem(to: indexPath)
         }
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isCanScroll = true
+    }
+}
+
+// MARK: - BQTabBarDelegate
+extension BQMainViewController: BQTabBarDelegate {
+    
+    func didSelectItem(at indexPath: IndexPath) {
+        isCanScroll = false
+        self.collcetionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
 }
