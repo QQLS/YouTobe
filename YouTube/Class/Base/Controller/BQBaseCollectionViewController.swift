@@ -32,7 +32,7 @@ class BQBaseCollectionViewController: UICollectionViewController {
         self.clearsSelectionOnViewWillAppear = true
         
         // 设置并添加刷新控件
-        refreshControl.addTarget(self, action: #selector(loadNewData), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(BQBaseCollectionViewController.loadNewData), for: .valueChanged)
         refreshControl.tintColor = kSchemeColor
         collectionView?.addSubview(refreshControl)
         collectionView?.register(UINib.init(nibName: videoCellReuseID, bundle: nil), forCellWithReuseIdentifier: videoCellReuseID)

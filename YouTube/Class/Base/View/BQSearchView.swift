@@ -42,7 +42,7 @@ class BQSearchView: UIView {
         let bgView = UIView()
         bgView.alpha = 0
         bgView.backgroundColor = .black
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismiss))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(BQSearchView.dismiss))
         bgView.addGestureRecognizer(tapGesture)
         return bgView
     } ()
@@ -50,7 +50,7 @@ class BQSearchView: UIView {
     private lazy var cancelBtn: UIButton = {
         let cancelBtn = UIButton(type: .custom)
         cancelBtn.setBackgroundImage(Asset.Cancel.image, for: [])
-        cancelBtn.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        cancelBtn.addTarget(self, action: #selector(BQSearchView.dismiss), for: .touchUpInside)
         return cancelBtn
     }()
     

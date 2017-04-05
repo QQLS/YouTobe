@@ -28,6 +28,10 @@
 		D15D481E1E8361B800001E09 /* BQVideoListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15D481D1E8361B800001E09 /* BQVideoListCell.swift */; };
 		D15D48201E83981600001E09 /* Int+Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15D481F1E83981600001E09 /* Int+Time.swift */; };
 		D15D48221E839DBD00001E09 /* CALayer+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15D48211E839DBD00001E09 /* CALayer+UIColor.swift */; };
+		D16BB2351E94BCED0080B9B7 /* BQPlayVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16BB2341E94BCED0080B9B7 /* BQPlayVideoCell.swift */; };
+		D16BB2371E94BE180080B9B7 /* BQVideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16BB2361E94BE180080B9B7 /* BQVideoModel.swift */; };
+		D16BB2391E94BEC90080B9B7 /* BQPlayVideoHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16BB2381E94BEC90080B9B7 /* BQPlayVideoHeader.swift */; };
+		D16BB23B1E94D8130080B9B7 /* BQSuggestedVideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16BB23A1E94D8130080B9B7 /* BQSuggestedVideoModel.swift */; };
 		D1D2F7C81E7FDD28000686DB /* BQModelTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D2F7C71E7FDD27000686DB /* BQModelTransformer.swift */; };
 		D1E8AC671E78D0530074D980 /* YouTubeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E8AC661E78D0530074D980 /* YouTubeTests.swift */; };
 		D1E8AC721E78D0530074D980 /* YouTubeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E8AC711E78D0530074D980 /* YouTubeUITests.swift */; };
@@ -95,6 +99,10 @@
 		D15D481D1E8361B800001E09 /* BQVideoListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BQVideoListCell.swift; sourceTree = "<group>"; };
 		D15D481F1E83981600001E09 /* Int+Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int+Time.swift"; sourceTree = "<group>"; };
 		D15D48211E839DBD00001E09 /* CALayer+UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+UIColor.swift"; sourceTree = "<group>"; };
+		D16BB2341E94BCED0080B9B7 /* BQPlayVideoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BQPlayVideoCell.swift; sourceTree = "<group>"; };
+		D16BB2361E94BE180080B9B7 /* BQVideoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BQVideoModel.swift; sourceTree = "<group>"; };
+		D16BB2381E94BEC90080B9B7 /* BQPlayVideoHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BQPlayVideoHeader.swift; sourceTree = "<group>"; };
+		D16BB23A1E94D8130080B9B7 /* BQSuggestedVideoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BQSuggestedVideoModel.swift; sourceTree = "<group>"; };
 		D1D2F7C71E7FDD27000686DB /* BQModelTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BQModelTransformer.swift; sourceTree = "<group>"; };
 		D1E8AC4B1E78D0530074D980 /* YouTube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouTube.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1E8AC621E78D0530074D980 /* YouTubeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YouTubeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -486,6 +494,8 @@
 		D1E8ACD21E791A6A0074D980 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				D16BB2361E94BE180080B9B7 /* BQVideoModel.swift */,
+				D16BB23A1E94D8130080B9B7 /* BQSuggestedVideoModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -493,6 +503,8 @@
 		D1E8ACD31E791A6A0074D980 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D16BB2341E94BCED0080B9B7 /* BQPlayVideoCell.swift */,
+				D16BB2381E94BEC90080B9B7 /* BQPlayVideoHeader.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -799,6 +811,7 @@
 				D1584D941E8CB3B1000D5ED0 /* BQSubscriptionTopCell.swift in Sources */,
 				D1584D8C1E8CA535000D5ED0 /* BQTrendingTopCell.swift in Sources */,
 				D1E8ACBB1E78D9E50074D980 /* BQMainViewController.swift in Sources */,
+				D16BB23B1E94D8130080B9B7 /* BQSuggestedVideoModel.swift in Sources */,
 				D15D48221E839DBD00001E09 /* CALayer+UIColor.swift in Sources */,
 				D15925931E812457004E97EC /* BQBaseCollectionViewController.swift in Sources */,
 				D14989C01E7A1DFC0073B23A /* BQTabBar.swift in Sources */,
@@ -806,16 +819,19 @@
 				D14989C21E7A38650073B23A /* BQSettingView.swift in Sources */,
 				D1E8ACC51E790EA50074D980 /* UIView+Frame.swift in Sources */,
 				D1584D921E8CB18E000D5ED0 /* BQProfileCell.swift in Sources */,
+				D16BB2371E94BE180080B9B7 /* BQVideoModel.swift in Sources */,
 				D1E8ACB91E78D9540074D980 /* BQAccountViewController.swift in Sources */,
 				D1E8ACB31E78D8FF0074D980 /* BQHomeViewController.swift in Sources */,
 				D1E8ACCD1E7914040074D980 /* UIImage+Extension.swift in Sources */,
 				D159255B1E80B7A5004E97EC /* BQModel.swift in Sources */,
+				D16BB2391E94BEC90080B9B7 /* BQPlayVideoHeader.swift in Sources */,
 				D1E8ACD51E791A870074D980 /* BQPlayViewController.swift in Sources */,
 				D1E8ACC71E790F940074D980 /* NSObject+String.swift in Sources */,
 				D15D481E1E8361B800001E09 /* BQVideoListCell.swift in Sources */,
 				D1584D961E8CB4EF000D5ED0 /* String+URL.swift in Sources */,
 				D15D48201E83981600001E09 /* Int+Time.swift in Sources */,
 				D1584D9A1E8CF497000D5ED0 /* BQAccountHeaderCell.swift in Sources */,
+				D16BB2351E94BCED0080B9B7 /* BQPlayVideoCell.swift in Sources */,
 				D14989C41E7A38730073B23A /* BQSearchView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
