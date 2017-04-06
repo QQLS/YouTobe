@@ -87,7 +87,6 @@ class BQSettingView: UIView {
             make.edges.equalToSuperview()
         }
         addSubview(tableView)
-        tableView.backgroundColor = .red
         tableView.snp.makeConstraints { (make) in
             make.left.centerX.equalToSuperview()
             make.top.equalTo(self.snp.bottom).offset(0)

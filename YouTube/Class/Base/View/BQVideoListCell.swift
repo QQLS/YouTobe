@@ -26,7 +26,10 @@ class BQVideoListCell: UICollectionViewCell {
             videoImage.kf.setImage(with: URL(string: realValue.thumbnail_image_name))
             channelImage.kf.setImage(with: URL(string: (realValue.channel?.profile_image_name)!))
             titleLabel.text = realValue.title
-            descriptionLabel.text = (realValue.channel?.name)! + String(describing: realValue.number_of_views)
+            let format = NumberFormatter()
+            format.numberStyle = .decimal
+            let viewerCount = format.string(from: realValue.number_of_views! as NSNumber)
+            descriptionLabel.text = (realValue.channel?.name)! + " • " + viewerCount!
             durationLabel.text = " " + realValue.duration! + " "
         }
     }

@@ -45,7 +45,6 @@ class BQPlayViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
         NotificationCenter.default.addObserver(self, selector: #selector(BQPlayViewController.show(notification:)), name: NSNotification.Name(PlayChangeNotification), object: nil)
     }
     
@@ -130,7 +129,7 @@ class BQPlayViewController: UIViewController {
             self.videoPlayer = AVPlayer(url: url)
             let playerLayer = AVPlayerLayer(player: self.videoPlayer)
             playerLayer.frame = self.playView.bounds
-            self.playView.layer.addSublayer(playerLayer)
+            self.playView.layer.insertSublayer(playerLayer, below: self.minimizeBtn.layer)
             if .hidden != self.state {
                 self.videoPlayer.play()
             }

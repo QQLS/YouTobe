@@ -18,7 +18,7 @@ class BQAccountPlayListCell: UICollectionViewCell {
         didSet {
             coverImage.kf.setImage(with: listItem?.pic?.url)
             titleLabel.text = listItem?.title
-            numberLabel.text = "\(listItem?.numberOfVideos ?? 0)"
+            numberLabel.text = "\(listItem?.numberOfVideos ?? 0) videos"
         }
     }
 }

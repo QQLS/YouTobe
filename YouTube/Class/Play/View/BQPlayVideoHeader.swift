@@ -25,12 +25,12 @@ class BQPlayVideoHeader: UIView {
             guard let realVideo = video else { return }
             
             albumTitleLabel.text = realVideo.title
-            viewersLabel.text = "\(realVideo.viewCount) views"
-            likesLabel.text = "\(realVideo.likes)"
-            delikesLabel.text = "\(realVideo.disLikes)"
+            viewersLabel.text = "\(realVideo.viewCount ?? 0) views"
+            likesLabel.text = "\(realVideo.likes ?? 0)"
+            delikesLabel.text = "\(realVideo.disLikes ?? 0)"
             channelImage.kf.setImage(with: realVideo.channelPic?.url)
             channelTitleLabel.text = realVideo.channelTitle
-            channelSubscribers.text = "\(realVideo.channelSubscribers) subscribers"
+            channelSubscribers.text = "\(realVideo.channelSubscribers ?? 0) subscribers"
         }
     }
 }

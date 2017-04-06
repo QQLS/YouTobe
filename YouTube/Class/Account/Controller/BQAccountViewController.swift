@@ -60,6 +60,13 @@ extension BQAccountViewController {
     }
 }
 
+// MARK: - UICollectionViewDelegate
+extension BQAccountViewController {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
 extension BQAccountViewController {
     
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
